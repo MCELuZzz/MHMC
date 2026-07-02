@@ -1,6 +1,6 @@
 # MHMC-AL-PES Reproducibility Materials
 
-![TOC graphic](./toc.png)
+![TOC graphic](./toc_graphic.png)
 
 This repository contains reproducibility materials for the manuscript:
 
