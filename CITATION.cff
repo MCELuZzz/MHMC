@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "Reproducibility materials for Coupled Minima Hopping and Monte Carlo with Active Learning for Global Sampling of Potential Energy Surfaces"
+message: "If you use these materials, please cite the associated manuscript."
+authors:
+  - family-names: "Lu"
+    given-names: "Zheng"
+  - family-names: "Xiong"
+    given-names: "Jiaqi"
+  - family-names: "Li"
+    given-names: "Shouhao"
+  - family-names: "Pan"
+    given-names: "Xiang"
+  - family-names: "Yao"
+    given-names: "Zihao"
+  - family-names: "Wang"
+    given-names: "Jianguo"

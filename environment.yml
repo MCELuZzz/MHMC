@@ -1,0 +1,18 @@
+name: mhmc-al-pes-repro
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - numpy
+  - scipy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - pyyaml
+  - tqdm
+  - ase
+  - pip
+  - pip:
+      - dscribe
+      # Optional for retraining/evaluation with NequIP; install following the official NequIP documentation.
+      # - nequip

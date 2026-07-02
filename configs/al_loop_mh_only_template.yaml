@@ -1,0 +1,74 @@
+# ===== AL loop configuration =====
+
+# Output root: all rounds go under here as al_round_NN/
+output_root: outputs_al
+
+# MHMC config path (used for the per-round MHMC sampling step)
+# The orchestrator will patch the calculator.model_path field
+# per round and direct output into the round subdirectory.
+mhmc_config: configs/Fe110.yaml
+
+# Reproducibility
+seed: 42
+
+# Parallelism for SOAP computation
+n_jobs: 4
+
+# ----- SOAP descriptor parameters -----
+soap:
+  r_cut:   5.0           # radial cutoff (A)
+  n_max:   8             # number of radial basis functions
+  l_max:   6             # max spherical harmonic order
+  sigma:   0.5           # Gaussian broadening (A)
+  average: "inner"       # per-atom power spectra averaged via inner product
+
+# ----- KPCA reduction -----
+kpca:
+  variance_threshold:    0.95
+  max_components:        50
+  # gamma:               null     # null → median-distance heuristic (recommended)
+  nystroem_components:   0        # 0 → exact KPCA; >0 → Nystroem approximation
+                                   # use >0 (e.g. 300) for pools > 5000 frames
+
+# ----- Stratified FPS selection -----
+selection:
+  n_select: 200           # total per round
+  source_weights:
+    minimum:        0.25
+    escape_md:      0.20
+    relaxation:     0.10
+
+# ----- VASP input generation -----
+vasp:
+  potcar_library: <PATH_TO_LICENSED_VASP_POTCAR_LIBRARY>
+  kpoints: [3, 3, 1]
+  
+  # Per-element initial magnetic moments (used to build MAGMOM string).
+  # MAGMOM is then auto-formatted per POSCAR.
+  magmom_by_element:
+    Fe: 2.5
+    Co: 1.7
+    Ni: 0.6
+    Mn: 3.5
+    H:  0.0
+    C:  0.0
+    N:  0.0
+    O:  0.0
+    Pd: 0.0
+    Cu: 0.0
+  
+  # INCAR parameters (passed as kwargs to generate_incar)
+  incar:
+    system_name: "MHMC-AL DFT (Fe-NH)"
+    encut:    400
+    ediff:    1.0e-5
+    prec:     "High"
+    algo:     "Fast"
+    nelm:     200
+    nsim:     4
+    npar:     2
+    lreal:    "A"
+    gga:      "PE"
+    ismear:   1
+    sigma:    0.1
+    ivdw:     12

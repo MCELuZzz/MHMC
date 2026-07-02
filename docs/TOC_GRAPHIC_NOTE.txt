@@ -1,0 +1,1 @@
+The README displays docs/toc_graphic.png near the top of the page. Replace this file with the final TOC/graphical abstract image if a different version is preferred. Recommended width for GitHub README display: 1200-1800 px.

@@ -1,0 +1,94 @@
+# Fe(110) / NH3 synthesis system configuration
+# Used by run_mhmc.py to instantiate MHMCConfig
+#
+# Notes:
+#   - Adsorbates are assumed appended after slab atoms; slab_n_atoms
+#     gives the number of slab atoms.
+#   - fixed_indices typically constrains the bottom 2 layers during
+#     escape MD and relaxation.
+
+system:
+  name: Fe110_NH3
+  slab_file: MLP_init/Fe110_slab.extxyz
+  initial_dataset: data/HNNH/3NH_NH2.extxyz   # from 2.1 step
+  mlp_model: <PATH_TO_TRAINED_NEQUIP_MODEL>        # ← 新增这行
+topology:
+  slab_n_atoms: 32
+  # fixed_indices: [0,2, 3, 6, 7,10,11,14,15,22,25,29,19,23,26,30]   # bottom 2 layers
+
+basin:
+  eps_E: 0.05      # eV
+  eps_R: 0.4       # Å
+
+escape:
+  T_init: 600.0   # K 
+  md_steps: 100
+  md_timestep_fs: 1.0
+  relax_fmax: 0.05
+  relax_steps: 200
+
+walk:
+  T_walk: 300.0
+  n_walk_steps: 80
+  walk_sigma: 0.25
+  dE_basin: 0.5
+
+# Add this block between `feedback:` and `loop:`
+chain:
+  E_diff_init: 0.5         # initial chain accept tolerance (eV)
+  E_diff_min: 0.1          # lower bound (eV)
+  E_diff_max: 2.0          # upper bound (eV)
+  chain_window: 10         # sliding window size (iterations)
+  chain_acc_target: 0.5    # target chain acceptance rate
+  chain_adapt_rate: 0.1    # E_diff adaptation aggressiveness
+  reject_T_factor: 1.2     # NEW: kappa, T multiplier on D2 reject
+feedback:
+  lambda_: 2.0
+  rho_star: 0.3
+  R_star: 0.5
+  gamma_rho: 1.0
+  gamma_R: 0.5
+  T_min: 700.0
+  T_max: 1000.0
+
+# Add this between `chain:` and `loop:`
+dataset:
+  md_stride: 10                  # snapshot every N MD steps
+  relax_stride: 5                # snapshot every N BFGS steps
+  walk_rejected_keep_ratio: 0.3  # fraction of rejected walks to keep
+  dataset_flush_every: 200       # flush buffer to disk every N frames
+
+loop:
+  n_iters: 20
+  mode: coupled    # mh_only | walk_only | serial | coupled
+  checkpoint_every: 50
+
+output:
+  log_path: outputs/Fe110_coupled.jsonl
+  checkpoint_path: outputs/Fe110_coupled_state.pkl
+  dataset_extxyz_path: outputs/candidate_pool.extxyz
+  dataset_index_path: outputs/candidate_pool_index.jsonl
+
+reproducibility:
+  seed: 42
+
+topology:
+  slab_n_atoms: 32
+  # fixed_indices: [...]
+
+  # Surface confinement (Hookean soft walls).
+  # Reference: slab's maximum z, computed automatically at init.
+  # Comment out / remove either offset to disable just that wall.
+  # Comment out / remove ALL three fields to fully disable confinement.
+  z_ceiling_offset: 3.0     # Å above slab top   (adsorbate not allowed higher)
+  z_floor_offset: -0.5      # Å above slab top   (adsorbate not allowed lower)
+  z_confine_k: 50.0         # eV/Å²              (spring constant, shared)
+
+# Optional Hookean penalty (omit or set 'enabled: false' to disable)
+hookean:
+  enabled: false
+  bond_pairs:
+    # [i, j, r0(Å)]  -- atom indices into the post-init structure
+    - [32, 33, 1.10]   # example: an N–N bond
+  k: 10.0
+  beta: 1.5
