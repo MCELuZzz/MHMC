@@ -109,23 +109,6 @@ python scripts/initialization_reference/example_run_initialization.py
 
 This example reads the Fe(110) slab, generates a few simple H/H/N coadsorption initial structures, and writes them to `data/structures/initialization/example_generated_HHN.extxyz`. It is a compact public reference example, not the full production initialization workflow.
 
-### 4. Run analysis and plotting scripts
-
-The scripts are provided as manuscript-analysis references. Before running them, check the command-line options and point them to local copies of the CSV/structure files required for each figure.
-
-Example:
-
-```bash
-python scripts/plotting/plot_layerB_combined.py \
-  --ablation-root data/figure_data/ablation_results_Hookean \
-  --seed-summary-csv data/figure_data/seed_metrics_summary.csv \
-  --group-summary-csv data/figure_data/group_metrics_summary.csv \
-  --coverage-csv data/figure_data/coverage_metric.csv \
-  --out data/figure_data/layerB_combined_reproduced.png
-```
-
-Some figure-generation scripts require CSV files generated from the authors' internal production workflow. When preparing the public repository, place the corresponding machine-readable source tables in `data/figure_data/` and update `FILE_MANIFEST.md`.
-
 ## VASP and pseudopotential note
 
 This repository does not include VASP pseudopotential files. Users should supply their own licensed VASP pseudopotential library and update the placeholder
