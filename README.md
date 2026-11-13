@@ -8,6 +8,24 @@ This repository contains reproducibility materials for the manuscript:
 
 This repository is prepared as the public **Data and Software Availability** repository for the manuscript. It is intended to support manuscript review, result checking, and reuse of the nonrestricted materials. It is **not** a full public software release of the authors' in-house coupled MH--MC production code. The production implementation is under active development for a future software release.
 
+## Public MHMC source code
+
+The complete Python source package for the coupled MH–MC sampler and its active-learning workflow is now provided in [`production_code/`](production_code/README.md).
+
+The released source includes:
+- the main MHMC sampler and iteration controller;
+- high-temperature MD escape and local geometry relaxation;
+- basin classification and basin management;
+- basin-confined Monte Carlo exploration;
+- feedback from local sampling to subsequent MH escape;
+- candidate-pool collection, logging, and checkpoint writing;
+- dual-channel Delaunay/grid initialization;
+- SOAP descriptors, KPCA, and stratified farthest-point sampling;
+- active-learning orchestration and VASP input-file preparation;
+- ablation and analysis utilities.
+
+See [`production_code/README.md`](production_code/README.md) for dependencies, configuration, and example commands.
+
 ## Scope of this repository
 
 The manuscript workflow has four main computational layers:
