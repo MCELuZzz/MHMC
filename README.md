@@ -35,7 +35,6 @@ The manuscript workflow has four main computational layers:
 3. **Diversity-driven active learning** using SOAP descriptors, kernel PCA, and stratified farthest-point sampling.
 4. **MLIP training and validation**, using **NequIP** as the production machine-learning interatomic potential backbone in the manuscript.
 
-This repository provides machine-readable structures, sanitized configuration templates, analysis scripts, plotting scripts, reference implementations for selected non-sensitive modules, pseudocode-level workflow documentation, lightweight and full validation examples available to the authors for this release, and notes on license-restricted files. The full production coupled MH--MC sampler remains in-house pending future software release, but the manuscript and `method_pseudocode/` directory document the algorithmic procedure, hyperparameters, and input/output definitions.
 
 ## Repository layout
 
