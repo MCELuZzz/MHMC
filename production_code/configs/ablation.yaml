@@ -1,0 +1,56 @@
+# ==========================================================
+#  Configuration for Section 3.2 ablation experiments
+# ==========================================================
+#
+# run_ablation.py reads this file, takes the base MHMC yaml,
+# and for each (mode, seed) cell:
+#   1. deep-copies base config
+#   2. applies the 'overrides' section below
+#   3. forces loop.mode and reproducibility.seed
+#   4. forces output paths into <output_root>/<mode>_seed<N>/
+#   5. spawns a worker subprocess that runs MHMCSampler
+#
+# Usage:
+#   python run_ablation.py configs/ablation.yaml
+#   python run_ablation.py configs/ablation.yaml --dry-run
+
+# ----- Base MHMC config (untouched by this ablation) -----
+base_config: configs/Fe110.yaml
+
+# ----- Where to write per-cell outputs -----
+output_root: ablation_results_Hookean_50
+
+# ----- Which modes to compare -----
+# All five modes are listed; comment out any you want to skip.
+modes:
+  - mh_only            # pure MH, no walk, no feedback
+  - walk_only          # never escapes; long MD baseline
+  - serial             # MH + walk both run, but uncoupled (no feedback)
+  - coupled_no_chain   # full feedback, but D2 chain control disabled
+  - coupled            # the full algorithm
+
+# ----- Seeds (one MHMC run per (mode, seed)) -----
+# Three seeds gives you mean ± std bands in Figure 3. Bump to 5 if you
+# want tighter error bars and have the compute.
+seeds: [42, 43, 44]
+
+# ----- Overrides applied to base_config before each run -----
+# These let you set ablation-specific values (e.g. n_iters) without
+# touching the production Fe110.yaml. Anything writable in the base
+# config can be overridden here, with nested dict merging.
+overrides:
+  system:
+    initial_index: 0     # 从第 6 帧（0-indexed）开始
+  loop:
+    n_iters: 100         # bump from default; 100 is a good ablation budget
+    checkpoint_every: 50
+
+  # Example: if you want the ablation to use less expensive MD
+  # escape:
+  #   md_steps: 80
+
+# ----- Parallelism -----
+# Each cell is a subprocess. If your NequIP model runs on GPU, n_workers
+# must reflect available GPU memory (1 is safest for a single GPU).
+# For CPU calculators, use os.cpu_count() // 2 or so.
+n_workers: 1

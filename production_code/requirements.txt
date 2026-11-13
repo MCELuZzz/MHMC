@@ -1,0 +1,16 @@
+# Core MHMC
+numpy
+scipy
+PyYAML
+ase
+tqdm
+
+# Active-learning selection / analysis
+scikit-learn
+dscribe
+pandas
+matplotlib
+
+# Production calculator
+# IMPORTANT: use a NequIP version compatible with the compiled .pt/.pt2 model.
+nequip
